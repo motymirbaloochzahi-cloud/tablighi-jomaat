@@ -1,8 +1,2 @@
-// مقادیر را از Firebase Console ← Project settings ← Your apps ← Web کپی کنید
-export const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  projectId: "YOUR_PROJECT",
-  storageBucket: "YOUR_PROJECT.firebasestorage.app",
-  appId: "YOUR_APP_ID"
-};
+// تنظیمات به صورت موقت غیرفعال شده است تا برنامه بدون فایربیس بالا بیاید
+const firebaseConfig = {};
