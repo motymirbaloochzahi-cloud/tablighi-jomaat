@@ -12,8 +12,16 @@ function ensureUsers(){if(isAdmin&&!usersSub&&db){usersSub=true;db.collection('u
 function setMode(m){mode=m;try{m?localStorage.setItem('mode',m):localStorage.removeItem('mode')}catch(e){}isAdmin=m==='admin'&&admins.includes(me);ensureUsers();adm=false;render()}
 const MODES={full:'حضور مداوم',flex:'انعطاف‌پذیر (رفت‌وآمد)'};
 async function start(){
-  user=window.__A.user;db=window.__A.db;
-  if(!db||!user){render();return}
+   user = window.__A && window.__A.user ? window.__A.user : { id: async () => 'guest', profiles: async () => ({}) };
+  db = window.__A && window.__A.db ? window.__A.db : null;
+  
+  if(!db) {
+    // اگر دیتابیس نبود، برنامه را در حالت مهمان (بدون خطا) اجرا کن
+    me = 'guest';
+    isAdmin = false;
+    render();
+    return;
+  }
   try{const nt=localStorage.getItem('note');if(nt){msg=nt;localStorage.removeItem('note')}}catch(e){}
   try{me=await user.id()}catch(e){}
   const err=()=>{msg='خطا در ارتباط با سرور';render()};
