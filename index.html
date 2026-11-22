@@ -29,20 +29,9 @@ label{font-size:14px;color:var(--mu)}
 .ok{background:var(--ac2);color:var(--ac)}.low{background:var(--wa2);color:var(--wa)}
 .tabs{display:flex;gap:6px;overflow-x:auto;padding:4px 0}.tabs button{white-space:nowrap}.msg{padding:6px 0;border-top:1px solid var(--bd)}.cmp{width:180px;height:180px;margin:10px auto;border:2px solid var(--bd);border-radius:50%;position:relative}.cmp i{position:absolute;inset:8px;display:flex;justify-content:center;font-style:normal;font-size:44px;transition:transform .2s}.item{display:flex;justify-content:space-between;gap:8px;padding:10px 0;border-top:1px solid var(--bd)}
 .ph{width:100%;max-height:240px;object-fit:cover;border-radius:10px;margin-bottom:8px}.cv{width:72px;height:96px;object-fit:cover;border-radius:6px;flex:none}a.btn{display:inline-block;text-decoration:none;border-radius:10px;padding:9px 14px;background:var(--ac);color:var(--bg)}details summary{cursor:pointer}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}.tile{display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 6px;background:var(--card);color:var(--tx);border:1px solid var(--bd);border-radius:14px;font-size:15px}.tile b{font-size:28px;font-weight:400}</style></head><body><main id="app"><p class="mu">در حال بارگذاری…</p></main>
-<script type="module">
-// کدهای اصلاح شده برای اجرا بدون فایربیس
-const app = document.getElementById('app');
-const h = (t, a = {}, ...c) => {
-  const e = document.createElement(t);
-  for (const k in a) {
-    if (k === 'on') for (const v in a.on) e.addEventListener(v, a.on[v]);
-    else e.setAttribute(k, a[k]);
-  }
-  c.flat().forEach(x => x != null && e.append(x));
-  return e;
-};
 
-// یک آبجکت خالی برای فایربیس می‌سازیم تا app.js ارور نده
+<script>
+// 1. تنظیمات ساختگی برای برنامه تا بدون فایربیس کار کند
 window.__A = {
   db: null,
   user: { id: async () => 'guest', profiles: async () => ({}) },
@@ -55,11 +44,8 @@ window.__A = {
   out: async () => {}
 };
 
-// حالا اسکریپت‌های اصلی رو یکی یکی لود می‌کنیم
-let loaded = false;
+// 2. استارت زدن برنامه
 const startApp = () => {
-  if (loaded) return;
-  loaded = true;
   const scripts = ['lang.js', 'adab.js', 'app.js'];
   const next = () => {
     const f = scripts.shift();
@@ -73,19 +59,12 @@ const startApp = () => {
   next();
 };
 
-// شروع برنامه
-startApp();
-</script>const user={id:async()=>auth.currentUser.uid,profiles:async ids=>{const o={};await Promise.all(ids.map(async i=>{try{const s=await getDoc(doc(fs,'users',i));o[i]={name:s.exists()?s.data().name:''}}catch(e){o[i]={name:''}}}));return o}};
-window.__A={db,user,simple:false,
- upload:async(b,p)=>{const r=sref(getStorage(fb),p);await uploadBytes(r,b,{contentType:b.type||'application/octet-stream'});return getDownloadURL(r)},
- isGuest:()=>!auth.currentUser||auth.currentUser.isAnonymous,
- register:async(name,email,pass)=>{const u=auth.currentUser;await linkWithCredential(u,EmailAuthProvider.credential(email,pass));await updateProfile(u,{displayName:name});await u.getIdToken(true);await setDoc(doc(fs,'users',u.uid),{name})},
- signin:async(email,pass)=>{await signInWithEmailAndPassword(auth,email,pass);try{localStorage.setItem('mode','user')}catch(e){}location.reload()},
- adminLogin:async(email,pass)=>{const r=await signInWithEmailAndPassword(auth,email,pass);const a=await getDoc(doc(fs,'admins',r.user.uid));if(!a.exists()){try{localStorage.setItem('note','این حساب دسترسی ادمین ندارد');localStorage.setItem('mode','user')}catch(e){}await signOut(auth);location.reload();return}try{localStorage.setItem('mode','admin')}catch(e){}location.reload()},
- out:async()=>{try{localStorage.removeItem('mode')}catch(e){}await signOut(auth);location.reload()}};
-let loaded=false;
-const startApp=()=>{if(loaded)return;loaded=true;const q=['lang.js','adab.js','app.js'],next=()=>{const f=q.shift();if(!f)return;const s=document.createElement('script');s.src=f;s.onload=s.onerror=next;document.body.append(s)};next()};
-onAuthStateChanged(auth,u=>{if(u){startApp();return}signInAnonymously(auth).catch(x=>{app.replaceChildren(h('div',{class:'card'},'ورود مهمان در Firebase فعال نیست. در Authentication ← Sign-in method گزینه Anonymous را فعال کنید. ('+(x.code||'')+')'))})});
+// اجرای برنامه بعد از لود شدن صفحه
+window.addEventListener('load', startApp);
+
+// 3. ثبت سرویس ورکر
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js'));
 }
-if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js'));
-</script></body></html>
+</script>
+</body></html>
