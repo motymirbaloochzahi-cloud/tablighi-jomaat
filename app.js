@@ -12,16 +12,35 @@ function ensureUsers(){if(isAdmin&&!usersSub&&db){usersSub=true;db.collection('u
 function setMode(m){mode=m;try{m?localStorage.setItem('mode',m):localStorage.removeItem('mode')}catch(e){}isAdmin=m==='admin'&&admins.includes(me);ensureUsers();adm=false;render()}
 const MODES={full:'حضور مداوم',flex:'انعطاف‌پذیر (رفت‌وآمد)'};
 async function start(){
-   user = window.__A && window.__A.user ? window.__A.user : { id: async () => 'guest', profiles: async () => ({}) };
-  db = window.__A && window.__A.db ? window.__A.db : null;
+  // ۱. برنامه را در حالت مهمان بالا بیاور (فایربیس غیرفعال)
+  user = { id: async () => 'guest', profiles: async () => ({}) };
+  db = {}; 
+  me = 'guest';
+  isAdmin = false;
   
-  if(!db) {
-    // اگر دیتابیس نبود، برنامه را در حالت مهمان (بدون خطا) اجرا کن
-    me = 'guest';
-    isAdmin = false;
-    render();
-    return;
-  }
+  // ۲. برنامه را رندر کن و از تابع خارج شو
+  render();
+  return;
+
+  // کدهای زیر دیگر اجرا نمی‌شوند (چون فایربیس نداریم)
+  try{const nt=localStorage.getItem('note');if(nt){msg=nt;localStorage.removeItem('note')}}catch(e){}
+  try{me=await user.id()}catch(e){}
+  const err=()=>{msg='خطا در ارتباط با سرور';render()};
+  db.collection('groups').onSnapshot(s=>{groups=s.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(b.created||0)-(a.created||0));loadNames()},err);
+  db.collection('madrasas').onSnapshot(s=>{madrasas=s.docs.map(d=>({id:d.id,...d.data()}));render()},err);
+  db.collection('scholars').onSnapshot(s=>{scholars=s.docs.map(d=>({id:d.id,...d.data()}));loadNames()},err);
+  db.collection('admins').onSnapshot(s=>{admins=s.docs.map(d=>d.id);adminsLoaded=true;isAdmin=mode==='admin'&&admins.includes(me);ensureUsers();render()},err);
+  db.collection('events').onSnapshot(s=>{events=s.docs.map(d=>({id:d.id,...d.data()}));render()},err);
+  db.collection('rsvps').onSnapshot(s=>{rsvps=s.docs.map(d=>({id:d.id,...d.data()}));render()},err);
+  db.collection('adab').onSnapshot(s=>{adabX=s.docs.map(d=>({id:d.id,...d.data()}));render()},err);
+  db.collection('centers').onSnapshot(s=>{centers=s.docs.map(d=>({id:d.id,...d.data()}));render()},err);
+  db.collection('center_revs').onSnapshot(s=>{crevs=s.docs.map(d=>({id:d.id,...d.data()}));render()},err);
+  db.collection('settings').onSnapshot(s=>{cfg={};s.docs.forEach(d=>cfg[d.id]=(d.data()||{}).text||'');render()},err);
+  db.collection('books').onSnapshot(s=>{books=s.docs.map(d=>({id:d.id,...d.data()}));render()},err);
+  db.collection('about').onSnapshot(s=>{about=s.docs.map(d=>({id:d.id,...d.data()}));render()},err);
+  db.collection('members').onSnapshot(s=>{members=s.docs.map(d=>({id:d.id,...d.data()}));loadNames()},err);
+  db.collection('posts').onSnapshot(s=>{posts=s.docs.map(d=>({id:d.id,...d.data()}));loadNames()},err);
+}}
   try{const nt=localStorage.getItem('note');if(nt){msg=nt;localStorage.removeItem('note')}}catch(e){}
   try{me=await user.id()}catch(e){}
   const err=()=>{msg='خطا در ارتباط با سرور';render()};
