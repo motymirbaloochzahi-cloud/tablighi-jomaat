@@ -688,8 +688,7 @@ function cenView(app){
   const hasLoc=c.lat!==''&&c.lat!=null&&c.lng!==''&&c.lng!=null;
   app.append(h('div',{class:'row'},h('button',{on:{click:()=>{if(guest()){regOpen=true;render();return}cenEdit=true;render()}}},'✏️ ویرایش'),h('button',{class:'g',on:{click:()=>{cenHist=true;render()}}},'🕘 تاریخچه ('+fa(crevs.filter(r=>r.cid===c.id).length)+')'),hasLoc?h('button',{class:'g',on:{click:()=>{cenOpen=false;mapOpen=true;mapFocus=[+c.lat,+c.lng];render()}}},'🗺 روی نقشه'):null));
   if(isAdmin)app.append(h('div',{class:'row',style:'margin-top:8px'},h('button',{class:'w',on:{click:()=>db.collection('centers').doc(c.id).set({...stripId(c),locked:!c.locked}).catch(()=>{msg='انجام نشد';render()})}},c.locked?'🔓 باز کردن قفل':'🔒 قفل صفحه'),h('button',{class:'w',on:{click:()=>confirm('صفحه حذف شود؟')&&db.collection('centers').doc(c.id).delete().then(()=>{cenId=null;render()}).catch(()=>{msg='حذف نشد';render()})}},'🗑 حذف')))}
-render();start();
-// شروع برنامه در حالت مهمان
+render();start();// شروع برنامه در حالت مهمان
 window.addEventListener('load', () => {
   setTimeout(() => {
     if (typeof start === 'function') start();
