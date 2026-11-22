@@ -1,0 +1,83 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    // کاربر مهمان (ناشناس) فقط می‌خواند؛ نوشتن نیازمند ثبت‌نام با ایمیل است
+    function registered() { return signedIn() && request.auth.token.firebase.sign_in_provider != 'anonymous'; }
+
+    match /users/{uid} {
+      // نام هر کاربر را هر عضو می‌تواند ببیند، اما فهرست کامل کاربران فقط برای ادمین است
+      allow get: if signedIn();
+      allow list: if signedIn() && isAdmin();
+      allow write: if registered() && request.auth.uid == uid;
+    }
+
+    function isAdmin() { return exists(/databases/$(database)/documents/admins/$(request.auth.uid)); }
+
+    match /admins/{uid} { allow read: if signedIn(); allow write: if signedIn() && isAdmin(); }
+    match /madrasas/{id} { allow read: if signedIn(); allow write: if signedIn() && isAdmin(); }
+    match /scholars/{id} { allow read: if signedIn(); allow write: if signedIn() && isAdmin(); }
+    match /books/{id} { allow read: if signedIn(); allow write: if signedIn() && isAdmin(); }
+    match /about/{id} { allow read: if signedIn(); allow write: if signedIn() && isAdmin(); }
+
+    match /groups/{gid} {
+      allow read: if signedIn();
+      // هر عضو می‌تواند گروه تشکیل دهد؛ امیر و عالم را فقط ادمین (پس از تکمیل) تعیین می‌کند
+      allow create: if registered() && request.resource.data.owner == request.auth.uid
+        && request.resource.data.alim == '' && request.resource.data.amir == ''
+        && request.resource.data.cap is int && request.resource.data.cap >= 2 && request.resource.data.cap <= 100;
+      allow update, delete: if signedIn() && isAdmin();
+    }
+
+    match /adab/{id} { allow read: if signedIn(); allow write: if signedIn() && isAdmin(); }
+    match /centers/{id} {
+      allow read: if signedIn();
+      allow create: if registered() && request.resource.data.rev == 1 && request.resource.data.locked == false;
+      allow update: if registered() && ((resource.data.locked == false && request.resource.data.locked == false) || isAdmin());
+      allow delete: if signedIn() && isAdmin();
+    }
+    match /center_revs/{rid} {
+      allow read: if signedIn();
+      allow create: if registered() && request.resource.data.by == request.auth.uid;
+      allow delete: if signedIn() && isAdmin();
+    }
+    match /events/{id} { allow read: if signedIn(); allow write: if signedIn() && isAdmin(); }
+    match /rsvps/{rid} {
+      allow read: if signedIn();
+      allow create: if registered() && request.resource.data.uid == request.auth.uid && rid == request.resource.data.eid + '_' + request.auth.uid;
+      allow delete: if registered() && (resource.data.uid == request.auth.uid || isAdmin());
+    }
+
+    match /settings/{id} { allow read: if signedIn(); allow write: if signedIn() && isAdmin(); }
+
+    match /members/{mid} {
+      allow read: if signedIn();
+      // عضویت همیشه «در انتظار تایید» شروع می‌شود
+      allow create: if registered() && request.resource.data.uid == request.auth.uid
+        && mid == request.resource.data.gid + '_' + request.auth.uid
+        && request.resource.data.approval == 'pending' && request.resource.data.pay == 'none';
+      // عضو نمی‌تواند تایید خود را تغییر دهد و پرداخت را فقط پس از تایید «ثبت‌شده» کند
+      allow update: if registered() && (isAdmin() || (resource.data.uid == request.auth.uid
+        && request.resource.data.uid == resource.data.uid
+        && request.resource.data.approval == resource.data.approval
+        && (request.resource.data.pay == resource.data.pay
+            || (resource.data.approval == 'approved' && resource.data.pay == 'none' && request.resource.data.pay == 'submitted'))));
+      allow delete: if registered() && (isAdmin() || resource.data.uid == request.auth.uid);
+    }
+
+    match /posts/{pid} {
+      function grp(gid) { return get(/databases/$(database)/documents/groups/$(gid)).data; }
+      function isAmir(gid) { return isAdmin() || grp(gid).amir == request.auth.uid; }
+      function isAlim(gid) { return grp(gid).alim == request.auth.uid; }
+      allow read: if signedIn();
+      // اعلان: امیر، عالم یا ادمین | برنامه: امیر یا ادمین | مشورت و گفتگو: همه
+      allow create: if registered() && request.resource.data.by == request.auth.uid
+        && (request.resource.data.type in ['sh','ch']
+            || (request.resource.data.type == 'an' && (isAmir(request.resource.data.gid) || isAlim(request.resource.data.gid)))
+            || (request.resource.data.type == 'pl' && isAmir(request.resource.data.gid)));
+      allow update: if registered() && resource.data.type == 'sh'
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['votes']);
+      allow delete: if signedIn() && isAmir(resource.data.gid);
+    }
+  }
+}

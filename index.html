@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="fa" dir="rtl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1f6f50">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="همسفر">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<title>همسفر</title>
+<style>
+:root{--bg:#f6f4ef;--card:#fff;--tx:#1c2a24;--mu:#66756d;--ac:#1f6f50;--ac2:#e3f1ea;--wa:#a4490a;--wa2:#fdf0dc;--bd:#e2ded4;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121a16;--card:#1b2620;--tx:#e8efe9;--mu:#98a89f;--ac:#5fc79b;--ac2:#1e3a2e;--wa:#f0b26b;--wa2:#3a2a14;--bd:#2b3a32;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#121a16;--card:#1b2620;--tx:#e8efe9;--mu:#98a89f;--ac:#5fc79b;--ac2:#1e3a2e;--wa:#f0b26b;--wa2:#3a2a14;--bd:#2b3a32;color-scheme:dark}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.7 Vazirmatn,Tahoma,system-ui,sans-serif}
+main{max-width:640px;margin:0 auto;padding:16px}
+h1{font-size:22px;margin:8px 0 4px}h2{font-size:18px;margin:0 0 8px}
+.mu{color:var(--mu);font-size:14px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px;margin:12px 0}
+button{font:inherit;border:0;border-radius:10px;padding:9px 14px;background:var(--ac);color:var(--bg);cursor:pointer}
+button.g{background:var(--ac2);color:var(--ac)}button.w{background:var(--wa2);color:var(--wa)}
+input,select,textarea{font:inherit;width:100%;padding:9px;border:1px solid var(--bd);border-radius:10px;background:var(--bg);color:var(--tx);margin:4px 0 8px}
+label{font-size:14px;color:var(--mu)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.b{display:inline-block;border-radius:99px;padding:1px 10px;font-size:13px}
+.in{background:var(--ac2);color:var(--ac)}.out{background:var(--wa2);color:var(--wa)}
+.bar{border-radius:12px;padding:10px 12px;margin:8px 0}
+.ok{background:var(--ac2);color:var(--ac)}.low{background:var(--wa2);color:var(--wa)}
+.tabs{display:flex;gap:6px;overflow-x:auto;padding:4px 0}.tabs button{white-space:nowrap}.msg{padding:6px 0;border-top:1px solid var(--bd)}.cmp{width:180px;height:180px;margin:10px auto;border:2px solid var(--bd);border-radius:50%;position:relative}.cmp i{position:absolute;inset:8px;display:flex;justify-content:center;font-style:normal;font-size:44px;transition:transform .2s}.item{display:flex;justify-content:space-between;gap:8px;padding:10px 0;border-top:1px solid var(--bd)}
+.ph{width:100%;max-height:240px;object-fit:cover;border-radius:10px;margin-bottom:8px}.cv{width:72px;height:96px;object-fit:cover;border-radius:6px;flex:none}a.btn{display:inline-block;text-decoration:none;border-radius:10px;padding:9px 14px;background:var(--ac);color:var(--bg)}details summary{cursor:pointer}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}.tile{display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 6px;background:var(--card);color:var(--tx);border:1px solid var(--bd);border-radius:14px;font-size:15px}.tile b{font-size:28px;font-weight:400}</style></head><body><main id="app"><p class="mu">در حال بارگذاری…</p></main>
+<script type="module">
+import {initializeApp} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
+import {getAuth,onAuthStateChanged,signInAnonymously,linkWithCredential,EmailAuthProvider,createUserWithEmailAndPassword,signInWithEmailAndPassword,updateProfile,signOut} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
+import {initializeFirestore,persistentLocalCache,collection,doc,addDoc,setDoc,deleteDoc,onSnapshot,getDoc} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+import {getStorage,ref as sref,uploadBytes,getDownloadURL} from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-storage.js';
+import {firebaseConfig} from './firebase-config.js';
+const app=document.getElementById('app');
+const h=(t,a={},...c)=>{const e=document.createElement(t);for(const k in a){if(k==='on')for(const v in a.on)e.addEventListener(v,a.on[v]);else e.setAttribute(k,a[k])}c.flat().forEach(x=>x!=null&&e.append(x));return e};
+if(firebaseConfig.apiKey.startsWith('YOUR')){app.replaceChildren(h('div',{class:'card'},'تنظیمات Firebase هنوز وارد نشده است. فایل firebase-config.js را طبق README پر کنید.'))}
+else{
+const fb=initializeApp(firebaseConfig),auth=getAuth(fb),fs=initializeFirestore(fb,{localCache:persistentLocalCache()});
+const db={collection:n=>({onSnapshot:(cb,er)=>onSnapshot(collection(fs,n),cb,er),add:async d=>({id:(await addDoc(collection(fs,n),d)).id}),doc:id=>({set:d=>setDoc(doc(fs,n,id),d),delete:()=>deleteDoc(doc(fs,n,id))})})};
+const user={id:async()=>auth.currentUser.uid,profiles:async ids=>{const o={};await Promise.all(ids.map(async i=>{try{const s=await getDoc(doc(fs,'users',i));o[i]={name:s.exists()?s.data().name:''}}catch(e){o[i]={name:''}}}));return o}};
+window.__A={db,user,simple:false,
+ upload:async(b,p)=>{const r=sref(getStorage(fb),p);await uploadBytes(r,b,{contentType:b.type||'application/octet-stream'});return getDownloadURL(r)},
+ isGuest:()=>!auth.currentUser||auth.currentUser.isAnonymous,
+ register:async(name,email,pass)=>{const u=auth.currentUser;await linkWithCredential(u,EmailAuthProvider.credential(email,pass));await updateProfile(u,{displayName:name});await u.getIdToken(true);await setDoc(doc(fs,'users',u.uid),{name})},
+ signin:async(email,pass)=>{await signInWithEmailAndPassword(auth,email,pass);try{localStorage.setItem('mode','user')}catch(e){}location.reload()},
+ adminLogin:async(email,pass)=>{const r=await signInWithEmailAndPassword(auth,email,pass);const a=await getDoc(doc(fs,'admins',r.user.uid));if(!a.exists()){try{localStorage.setItem('note','این حساب دسترسی ادمین ندارد');localStorage.setItem('mode','user')}catch(e){}await signOut(auth);location.reload();return}try{localStorage.setItem('mode','admin')}catch(e){}location.reload()},
+ out:async()=>{try{localStorage.removeItem('mode')}catch(e){}await signOut(auth);location.reload()}};
+let loaded=false;
+const startApp=()=>{if(loaded)return;loaded=true;const q=['lang.js','adab.js','app.js'],next=()=>{const f=q.shift();if(!f)return;const s=document.createElement('script');s.src=f;s.onload=s.onerror=next;document.body.append(s)};next()};
+onAuthStateChanged(auth,u=>{if(u){startApp();return}signInAnonymously(auth).catch(x=>{app.replaceChildren(h('div',{class:'card'},'ورود مهمان در Firebase فعال نیست. در Authentication ← Sign-in method گزینه Anonymous را فعال کنید. ('+(x.code||'')+')'))})});
+}
+if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js'));
+</script></body></html>
