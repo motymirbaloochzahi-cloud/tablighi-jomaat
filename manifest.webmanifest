@@ -1,1 +1,20 @@
-{"name":"همسفر؛ هماهنگی گروه‌های خروج","short_name":"همسفر","lang":"fa","dir":"rtl","start_url":"./index.html","scope":"./","display":"standalone","background_color":"#f6f4ef","theme_color":"#1f6f50","icons":[{"src":"icons/icon-192.png","sizes":"192x192","type":"image/png"},{"src":"icons/icon-512.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}]}
+{
+  "name": "تبلیغ جماعت",
+  "short_name": "تبلیغ جماعت",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f6f4ef",
+  "theme_color": "#1f6f50",
+  "icons": [
+    {
+      "src": "https://motymirbaloochzahi-cloud.github.io/tabligi-jomaat/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://motymirbaloochzahi-cloud.github.io/tabligi-jomaat/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
