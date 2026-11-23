@@ -27,7 +27,7 @@
         .adab-item { background: var(--card); border: 1px solid var(--bd); border-radius: 10px; padding: 12px; text-align: right; cursor: pointer; display: flex; align-items: center; gap: 10px; }
         .adab-text { text-align: right; line-height: 2; font-size: 16px; }
 
-        /* ====== استایل‌های اختصاصی قطب‌نما ====== */
+        /* ====== استایل‌های قطب‌نما ====== */
         .compass-wrapper {
             position: relative;
             width: 320px;
@@ -38,12 +38,20 @@
         /* دایره داخلی که می‌چرخد */
         .compass-disc {
             position: absolute;
-            top: 40px; left: 40px; right: 40px; bottom: 40px; /* فاصله 40px برای حروف بیرونی */
+            top: 40px; left: 40px; right: 40px; bottom: 40px; /* 40px فاصله برای حروف */
             border-radius: 50%;
             border: 3px solid var(--ac);
             background: #fff;
             box-shadow: inset 0 0 15px rgba(0,0,0,0.05), 0 4px 10px rgba(0,0,0,0.1);
+            /* transition حذف شد تا حرکت نرم و بدون تاخیر باشه */
+        }
+
+        /* گروه چرخان (شامل همه چیز) */
+        .rotating-group {
+            position: absolute;
+            inset: -40px; /* کشیده میشه تا حروف بیرون رو هم بگیره */
             transition: transform 0.1s linear;
+            border-radius: 50%;
         }
 
         /* خط نقطه‌چین از مرکز به سمت لبه */
@@ -51,13 +59,13 @@
             position: absolute;
             top: 50%;
             left: 50%;
-            width: 120px; /* نصف قطر دایره (دایره 240px قطر دارد) */
+            width: 120px; 
             height: 4px;
             background-image: linear-gradient(to right, var(--ac) 50%, transparent 50%);
             background-size: 10px 4px;
             background-repeat: repeat-x;
             transform-origin: left center;
-            margin-top: -2px; /* برای تراز شدن وسط خط */
+            margin-top: -2px; 
             z-index: 1;
         }
 
@@ -69,7 +77,7 @@
             width: 40px;
             height: 40px;
             margin-top: -20px;
-            margin-left: 100px; /* 120px (نصف قطر) - 20px (نصف عرض آیکون) */
+            margin-left: 100px; /* 120px (نصف قطر) - 20px */
             background: #fff;
             border-radius: 50%;
             display: flex;
@@ -78,7 +86,7 @@
             font-size: 24px;
             z-index: 3;
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            transform-origin: -100px center; /* چرخش دور مرکز دایره */
+            transform-origin: -100px center; /* چرخش دور مرکز */
         }
 
         /* نقطه مرکزی */
@@ -94,10 +102,10 @@
             z-index: 2;
         }
 
-        /* حروف جهات بیرون از دایره */
+        /* حروف جهات که حالا با دایره می‌چرخن */
         .dir-letter {
             position: absolute;
-            font-size: 20px;
+            font-size: 24px;
             font-weight: bold;
             color: var(--tx);
             width: 30px;
@@ -105,18 +113,13 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            z-index: 4;
         }
-        .letter-n { top: -5px; left: 50%; transform: translateX(-50%); color: var(--red); }
-        .letter-s { bottom: -5px; left: 50%; transform: translateX(-50%); }
-        .letter-e { right: -5px; top: 50%; transform: translateY(-50%); }
-        .letter-w { left: -5px; top: 50%; transform: translateY(-50%); }
-
-        /* کانتینر چرخان شامل خط چین، آیکون کعبه */
-        .rotating-group {
-            position: absolute;
-            inset: 0;
-            transition: transform 0.1s linear;
-        }
+        /* موقعیت حروف بیرون از دایره (فاصله 40px از لبه دایره) */
+        .letter-n { top: 0px; left: 50%; transform: translateX(-50%); color: var(--red); }
+        .letter-s { bottom: 0px; left: 50%; transform: translateX(-50%); }
+        .letter-e { right: 0px; top: 50%; transform: translateY(-50%); }
+        .letter-w { left: 0px; top: 50%; transform: translateY(-50%); }
 
         .status-box { background: var(--ac2); color: var(--ac); padding: 8px; border-radius: 8px; margin-top: 10px; font-size: 14px; }
     </style>
@@ -162,18 +165,18 @@
                         <h2>🧭 قبله‌نما</h2>
                         
                         <div class="compass-wrapper">
-                            <!-- حروف جهات (ثابت در بیرون) -->
-                            <div class="dir-letter letter-n">N</div>
-                            <div class="dir-letter letter-s">S</div>
-                            <div class="dir-letter letter-e">E</div>
-                            <div class="dir-letter letter-w">W</div>
-
-                            <!-- کل دایره با محتویاتش -->
-                            <div id="compass-container" class="compass-disc">
-                                <!-- این گروه می‌چرخد -->
+                            <!-- دایره که شامل گروه چرخان است -->
+                            <div class="compass-disc">
+                                <!-- گروه چرخان (خط چین، کعبه و حروف) -->
                                 <div id="rotating-group" class="rotating-group">
                                     <div class="dashed-line"></div>
                                     <div class="kaba-icon">🕋</div>
+                                    
+                                    <!-- حروف جهات که حالا با دایره می‌چرخن -->
+                                    <div class="dir-letter letter-n">N</div>
+                                    <div class="dir-letter letter-s">S</div>
+                                    <div class="dir-letter letter-e">E</div>
+                                    <div class="dir-letter letter-w">W</div>
                                 </div>
                                 <div class="center-dot"></div>
                             </div>
@@ -186,7 +189,6 @@
                     </div>
                 `;
             } 
-            // بقیه کدها (آداب، قرآن) بدون تغییر
             else if (page === 'adab') {
                 let html = `<div class="card" style="text-align:right;"><h2 style="text-align:center;">📖 آداب</h2><div class="adab-list">`;
                 ADAB_DATA.forEach((item, index) => {
@@ -272,7 +274,6 @@
             window.addEventListener('deviceorientation', handleOrientation);
             compassActive = true;
             
-            // دکمه کالیبراسیون
             const calBtn = document.createElement('button');
             calBtn.innerText = "تنظیم دستی جهت (کالیبراسیون)";
             calBtn.className = "btn-gray";
@@ -296,9 +297,23 @@
 
             currentHeading = heading + calibrationOffset;
             
-            // چرخش گروه (کعبه + خط چین) به سمت زاویه قبله نسبت به جهت گوشی
-            const rotation = qiblaAngle - currentHeading;
-            rotatingGroup.style.transform = `rotate(${rotation}deg)`;
+            // چرخش کل گروه (شامل حروف، خط چین و کعبه)
+            // به جای اینکه کعبه رو جدا بچرخونیم، کل گروه رو با هم می‌چرخونیم
+            rotatingGroup.style.transform = `rotate(${-currentHeading}deg)`;
+            
+            // حالا چون کعبه داخل گروهه، باید داخل خود گروه هم بچرخه
+            const kaba = rotatingGroup.querySelector('.kaba-icon');
+            const dashedLine = rotatingGroup.querySelector('.dashed-line');
+            
+            if (kaba && dashedLine) {
+                // چرخش اضافی برای کعبه تا به سمت قبله اشاره کنه
+                // چون کل گروه -currentHeading چرخیده، کعبه باید با زاویه qibla بچرخه
+                const extraRotation = qiblaAngle;
+                
+                // چرخش دور مرکز
+                kaba.style.transform = `rotate(${extraRotation}deg)`;
+                dashedLine.style.transform = `rotate(${extraRotation}deg)`;
+            }
         }
 
         function stopCompass() {
