@@ -27,9 +27,21 @@
         .adab-text { text-align: right; line-height: 2; font-size: 16px; }
         .adab-text .ar { font-family: 'Amiri', serif; font-size: 22px; color: var(--ac); margin: 10px 0; display: block; border-right: 3px solid var(--ac); padding-right: 10px; }
 
-        /* استایل‌های قبله‌نما */
-        .compass { width: 200px; height: 200px; border: 4px solid var(--ac); border-radius: 50%; margin: 20px auto; position: relative; display: flex; align-items: center; justify-content: center; font-size: 60px; transition: transform 0.1s linear; }
+        /* استایل‌های قبله‌نما (جدید) */
+        .compass-container { position: relative; width: 260px; height: 260px; margin: 20px auto; border: 3px solid var(--bd); border-radius: 50%; background: #fff; box-shadow: inset 0 0 20px rgba(0,0,0,0.05); }
+        .compass-ring { position: absolute; inset: 0; border-radius: 50%; transition: transform 0.1s linear; }
+        .compass-dir { position: absolute; font-weight: bold; font-size: 18px; color: var(--tx); }
+        .dir-n { top: 10px; left: 50%; transform: translateX(-50%); color: var(--wa); }
+        .dir-s { bottom: 10px; left: 50%; transform: translateX(-50%); }
+        .dir-e { right: 10px; top: 50%; transform: translateY(-50%); }
+        .dir-w { left: 10px; top: 50%; transform: translateY(-50%); }
         
+        /* نشانگر قبله روی لبه */
+        .qibla-indicator { position: absolute; top: -15px; left: 50%; transform: translateX(-50%); font-size: 30px; transition: transform 0.1s linear; transform-origin: 50% 145px; z-index: 10; }
+        
+        /* عقربه شمال */
+        .north-needle { position: absolute; top: 50%; left: 50%; width: 4px; height: 100px; background: linear-gradient(to bottom, #e74c3c 50%, #fff 50%); transform-origin: 50% 0%; margin-left: -2px; margin-top: -100px; border-radius: 2px; opacity: 0.3;}
+
         /* استایل‌های قرآن */
         .quran-select { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--bd); margin-bottom: 10px; font-family: inherit; }
         .ayah { font-family: 'Amiri', serif; font-size: 24px; text-align: center; line-height: 2; margin: 10px 0; border-bottom: 1px dashed var(--bd); padding-bottom: 10px; }
@@ -51,7 +63,6 @@
     </main>
 
     <script>
-        // --- داده‌های آداب (خلاصه شده برای حجم کمتر) ---
         const ADAB_DATA = [
             { title: "آداب وضو", icon: "💧", items: ["نیت وضو را به دل بگیرید و «بسم الله» بگویید.", "دو دست را تا مچ بشویید و مسواک بزنید.", "سه بار مضمضه (آب در دهان) و استنشاق (آب در بینی) انجام دهید.", "صورت را بشویید: از جای رویش موی سر تا زیر چانه و از این گوش تا آن گوش (فرض).", "دست‌ها را تا آرنج بشویید (فرض).", "سر را مسح کنید و گوش‌ها را مسح کنید.", "پاها را تا مچ بشویید (فرض).", "در مصرف آب اسراف نکنید."] },
             { title: "آداب نماز", icon: "🤲", items: ["پیش از اذان آماده شوید: وضو، لباس پاک و مناسب.", "با آرامش و وقار به مسجد بروید.", "پس از سلام، سه بار استغفار کنید و تسبیحات حضرت زهرا (س) را بگویید.", "با خشوع و حضور قلب نماز بخوانید."] },
@@ -59,7 +70,6 @@
             { title: "اذکار بعد از نماز", icon: "📿", items: ["سه بار استغفار: أَسْتَغْفِرُ اللَّهَ", "آیةالکرسی را بخوانید.", "سبحان‌الله ۳۳ بار، الحمدلله ۳۳ بار و الله‌اکبر ۳۴ بار بگویید."] }
         ];
 
-        // --- لیست سوره‌های قرآن (برای منوی کشویی) ---
         const SURAHS = [
             { id: 1, name: "الفاتحة" }, { id: 2, name: "البقرة" }, { id: 3, name: "آل عمران" }, { id: 4, name: "النساء" }, { id: 5, name: "المائدة" },
             { id: 18, name: "الكهف" }, { id: 36, name: "يس" }, { id: 55, name: "الرحمن" }, { id: 67, name: "الملك" }, { id: 112, name: "الإخلاص" }, { id: 113, name: "الفلق" }, { id: 114, name: "الناس" }
@@ -85,10 +95,23 @@
                 content.innerHTML = `
                     <div class="card">
                         <h2>🧭 قبله‌نما</h2>
-                        <p>برای فعال شدن قطب‌نما، دکمه زیر را بزنید و گوشی را صاف نگه دارید.</p>
-                        <div id="compass" class="compass">🕋</div>
+                        <p style="color:var(--mu); font-size:14px;">برای دقت بیشتر، گوشی را صاف روی دست بگیرید و از فلزات دور کنید.</p>
+                        
+                        <div class="compass-container">
+                            <!-- حلقه جهت‌ها که با گوشی می‌چرخد -->
+                            <div id="compass-ring" class="compass-ring">
+                                <div class="compass-dir dir-n">شمال</div>
+                                <div class="compass-dir dir-s">جنوب</div>
+                                <div class="compass-dir dir-e">شرق</div>
+                                <div class="compass-dir dir-w">غرب</div>
+                                <!-- نشانگر قبله روی لبه -->
+                                <div id="qibla-indicator" class="qibla-indicator">🕋</div>
+                            </div>
+                        </div>
+                        
                         <button onclick="startCompass()">فعال‌سازی قطب‌نما</button>
-                        <button style="background:var(--wa); color:white" onclick="back()">بازگشت</button>
+                        <button style="background:var(--wa); color:white" onclick="stopCompass(); back()">توقف و بازگشت</button>
+                        <p id="compass-status" style="color:var(--ac); font-size:14px; margin-top:10px;"></p>
                     </div>
                 `;
             } 
@@ -137,23 +160,64 @@
             content.innerHTML = html;
         }
 
-        // --- منطق تسبیح ---
         let count = 0;
         function increment() { count++; document.getElementById('count').innerText = count; }
         function reset() { count = 0; document.getElementById('count').innerText = 0; }
         function back() { document.getElementById('content').innerHTML = ''; document.getElementById('main-menu').classList.remove('hidden'); }
 
-        // --- منطق قبله‌نما ---
+        // ==================== منطق پیشرفته قبله‌نما ====================
+        let currentHeading = 0; // جهت فعلی گوشی نسبت به شمال
+        let qiblaAngle = 0;     // زاویه قبله نسبت به شمال
         let compassActive = false;
+        let myLat = null, myLng = null;
+
+        // فرمول ریاضی محاسبه زاویه قبله (Bearing)
+        function calculateQibla(lat, lng) {
+            const K_LAT = 21.4225, K_LNG = 39.8262; // مختصات کعبه
+            const phi1 = lat * Math.PI / 180;
+            const phi2 = K_LAT * Math.PI / 180;
+            const deltaLambda = (K_LNG - lng) * Math.PI / 180;
+            const y = Math.sin(deltaLambda) * Math.cos(phi2);
+            const x = Math.cos(phi1) * Math.sin(phi2) - Math.sin(phi1) * Math.cos(phi2) * Math.cos(deltaLambda);
+            const bearing = Math.atan2(y, x) * 180 / Math.PI;
+            return (bearing + 360) % 360;
+        }
+
         function startCompass() {
             if (compassActive) return;
+            
+            const status = document.getElementById('compass-status');
+            status.innerText = "در حال یافتن موقعیت...";
+
+            // ۱. گرفتن موقعیت مکانی کاربر
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (pos) => {
+                        myLat = pos.coords.latitude;
+                        myLng = pos.coords.longitude;
+                        qiblaAngle = calculateQibla(myLat, myLng);
+                        status.innerText = `موقعیت یافت شد. زاویه قبله: ${Math.round(qiblaAngle)} درجه`;
+                        initDeviceOrientation();
+                    },
+                    (err) => {
+                        status.innerText = "خطا در یافتن موقعیت. لطفاً GPS را روشن کنید.";
+                        status.style.color = "red";
+                    }
+                );
+            } else {
+                status.innerText = "مرورگر شما از موقعیت مکانی پشتیبانی نمی‌کند.";
+            }
+        }
+
+        function initDeviceOrientation() {
+            // ۲. فعال‌سازی سنسور قطب‌نما
             if (window.DeviceOrientationEvent && typeof DeviceOrientationEvent.requestPermission === 'function') {
                 DeviceOrientationEvent.requestPermission().then(permission => {
                     if (permission === 'granted') {
                         window.addEventListener('deviceorientation', handleOrientation);
                         compassActive = true;
                     } else {
-                        alert('دسترسی به قطب‌نما داده نشد.');
+                        document.getElementById('compass-status').innerText = "دسترسی به قطب‌نما داده نشد.";
                     }
                 });
             } else {
@@ -163,8 +227,9 @@
         }
 
         function handleOrientation(event) {
-            const compass = document.getElementById('compass');
-            if (!compass) return;
+            const ring = document.getElementById('compass-ring');
+            const qiblaInd = document.getElementById('qibla-indicator');
+            if (!ring || !qiblaInd) return;
             
             let heading = event.webkitCompassHeading;
             if (heading === undefined || heading === null) {
@@ -172,14 +237,29 @@
                 else return;
             }
 
-            // زاویه تقریبی قبله برای ایران (حدود ۲۱۳ درجه)
-            const qiblaAngle = 213;
-            const rotation = qiblaAngle - heading;
+            currentHeading = heading;
 
-            compass.style.transform = `rotate(${rotation}deg)`;
+            // چرخش حلقه جهت‌ها (شمال همیشه بالا بماند یا با گوشی بچرخد؟)
+            // در اینجا حلقه را می‌چرخانیم تا شمال واقعی همیشه بالا باشد
+            ring.style.transform = `rotate(${-currentHeading}deg)`;
+
+            // محاسبه زاویه نشانگر قبله نسبت به شمال
+            // چون کل حلقه چرخیده، باید زاویه قبله را هم نسبت به حلقه تنظیم کنیم
+            const relativeQibla = qiblaAngle - currentHeading;
+            
+            // چرخش عقربه کعبه (نسبت به مرکز دایره)
+            qiblaInd.style.transform = `translateX(-50%) rotate(${relativeQibla}deg)`;
+            
+            // چون کعبه روی لبه هست، برای اینکه همیشه رو به بیرون باشه، یک چرخش معکوس هم نیاز داره
+            // اما فعلاً ساده‌ترین حالت اینه که فقط بچرخه
         }
 
-        // --- منطق قرآن (اتصال به API) ---
+        function stopCompass() {
+            window.removeEventListener('deviceorientation', handleOrientation);
+            compassActive = false;
+        }
+
+        // ==================== منطق قرآن ====================
         async function loadSurah(surahId) {
             const contentDiv = document.getElementById('quran-content');
             if (!surahId) { contentDiv.innerHTML = ''; return; }
