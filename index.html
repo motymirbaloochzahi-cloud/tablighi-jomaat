@@ -7,47 +7,32 @@
     <link rel="manifest" href="manifest.webmanifest">
     <title>تبلیغ جماعت</title>
     <style>
-        /* تعریف رنگ‌های تم تاریک بر اساس عکس‌های شما */
         :root {
-            --bg: #121a16;
-            --card: #1b2620;
-            --tx: #e8efe9;
-            --mu: #98a89f;
-            --ac: #5fc79b;
-            --ac2: #1e3a2e;
-            --wa: #f0b26b;
-            --wa2: #3a2a14;
-            --bd: #2b3a32;
+            --bg: #121a16; --card: #1b2620; --tx: #e8efe9; --mu: #98a89f;
+            --ac: #5fc79b; --ac2: #1e3a2e; --wa: #f0b26b; --wa2: #3a2a14; --bd: #2b3a32;
         }
-        
         * { box-sizing: border-box; font-family: Tahoma, Vazirmatn, sans-serif; }
         body { margin: 0; background: var(--bg); color: var(--tx); padding: 16px; }
         main { max-width: 640px; margin: 0 auto; }
-        
         h1 { font-size: 22px; margin-bottom: 4px; }
         h2 { font-size: 18px; margin: 0 0 12px 0; text-align: center; color: var(--ac); }
         .card { background: var(--card); border: 1px solid var(--bd); border-radius: 16px; padding: 16px; margin-bottom: 16px; }
         
-        /* دکمه‌ها */
         button { font: inherit; border: 0; border-radius: 12px; padding: 12px; background: var(--ac2); color: var(--ac); cursor: pointer; transition: 0.2s; }
-        button:active { transform: scale(0.96); }
         .btn-primary { background: var(--ac); color: var(--bg); font-weight: bold; width: 100%; margin-top: 10px; }
         .btn-danger { background: var(--wa2); color: var(--wa); width: 100%; margin-top: 10px; }
         
-        /* منوی اصلی (شبیه عکس) */
         .grid-menu { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
         .tile { background: var(--card); border: 1px solid var(--bd); border-radius: 16px; padding: 16px; text-align: center; font-size: 15px; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; color: var(--tx); }
-        .tile img { width: 40px; height: 40px; object-fit: contain; }
-        .tile b { font-size: 32px; line-height: 1; } /* اگر از ایموجی استفاده کردیم */
+        .tile b { font-size: 32px; line-height: 1; }
         
-        /* آداب (شبیه عکس) */
         .adab-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
         .adab-tile { background: var(--card); border: 1px solid var(--bd); border-radius: 16px; padding: 20px 10px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 8px; }
         .adab-tile b { font-size: 28px; }
         .adab-text { text-align: right; line-height: 2.2; font-size: 16px; color: var(--tx); }
         .adab-text .ar { font-family: 'Amiri', serif; font-size: 22px; color: var(--ac); margin: 10px 0; display: block; border-right: 3px solid var(--ac); padding-right: 10px; }
 
-        /* ====== استایل‌های قطب‌نما ====== */
+        /* قطب‌نما */
         .compass-wrapper { position: relative; width: 300px; height: 300px; margin: 20px auto; }
         .compass-disc { position: absolute; top: 40px; left: 40px; right: 40px; bottom: 40px; border-radius: 50%; border: 3px solid var(--ac); background: var(--card); box-shadow: inset 0 0 15px rgba(0,0,0,0.2); }
         .letters-group { position: absolute; inset: -40px; transition: transform 0.1s linear; border-radius: 50%; }
@@ -61,60 +46,51 @@
         .letter-w { left: 0px; top: 50%; transform: translateY(-50%); }
         .status-box { background: var(--ac2); color: var(--ac); padding: 10px; border-radius: 10px; margin-top: 10px; font-size: 14px; text-align: center; }
 
-        /* ====== استایل‌های تسبیح ====== */
+        /* تسبیح */
         .tasbih-targets { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 12px; }
         .tasbih-targets button { flex: 1; white-space: nowrap; padding: 8px; font-size: 14px; }
         .tasbih-targets button.active { background: var(--ac); color: var(--bg); }
-        
         .beads-container { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin: 20px 0; }
         .bead { width: 20px; height: 20px; border-radius: 50%; background: var(--ac2); border: 1px solid var(--bd); transition: background 0.2s; }
         .bead.active { background: var(--ac); box-shadow: 0 0 8px var(--ac); }
-        
         .tasbih-clicker { font-size: 64px; font-weight: bold; text-align: center; padding: 30px; background: var(--card); border: 2px dashed var(--ac); border-radius: 50%; width: 200px; height: 200px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; user-select: none; }
         .tasbih-clicker:active { transform: scale(0.95); }
 
-        /* استایل قرآن */
+        /* قرآن */
         .quran-select { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--bd); background: var(--card); color: var(--tx); margin-bottom: 15px; font-family: inherit; font-size: 16px; }
         .ayah-box { border-bottom: 1px dashed var(--bd); padding-bottom: 16px; margin-bottom: 16px; }
         .ayah-number { background: var(--ac2); color: var(--ac); border-radius: 50%; width: 30px; height: 30px; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: bold; margin-bottom: 8px; }
         .ayah-arabic { font-family: 'Amiri', serif; font-size: 26px; text-align: center; line-height: 2; margin-bottom: 12px; color: var(--tx); }
         .ayah-farsi { font-size: 15px; color: var(--mu); text-align: center; line-height: 1.8; }
         .bismillah { text-align: center; font-family: 'Amiri', serif; font-size: 28px; color: var(--ac); margin-bottom: 20px; }
-        
         .hidden { display: none; }
     </style>
 </head>
 <body>
     <main>
-        <!-- هدر -->
         <div style="display:flex; justify-content:space-between; align-items:center;">
             <h1>تبلیغ جماعت</h1>
             <button onclick="back()" style="padding:8px 12px; font-size:14px;">منو ☰</button>
         </div>
         <p style="color:var(--mu); margin-bottom: 24px; font-size:14px;">هماهنگی گروه‌های خروج</p>
 
-        <!-- منوی اصلی -->
         <div id="main-menu">
             <div class="grid-menu">
-                <!-- در اینجا می‌توانید تگ img را با آیکون‌های خودتان جایگزین کنید -->
                 <div class="tile" onclick="show('qibla')"><b>🧭</b> قبله و اوقات</div>
                 <div class="tile" onclick="show('tasbih')"><b>📿</b> تسبیح‌شمار</div>
                 <div class="tile" onclick="show('quran')"><b>📖</b> قرآن کریم</div>
                 <div class="tile" onclick="show('adab')"><b>📚</b> آداب و اذکار</div>
             </div>
-            <!-- بخش آداب در منوی اصلی -->
             <div class="card" style="margin-top: 16px;">
                 <h2>📖 آداب و دستورات</h2>
                 <div class="adab-grid" id="main-adab-grid"></div>
             </div>
         </div>
 
-        <!-- محتوا -->
         <div id="content"></div>
     </main>
 
     <script>
-        // --- داده‌های آداب ---
         const ADAB_DATA = [
             { title: "آداب وضو", icon: "💧", items: ["نیت وضو را به دل بگیرید و «بسم الله» بگویید.", "دو دست را تا مچ بشویید و مسواک بزنید.", "سه بار مضمضه (آب در دهان) و استنشاق (آب در بینی) انجام دهید.", "صورت را بشویید: از جای رویش موی سر تا زیر چانه و از این گوش تا آن گوش (فرض).", "دست‌ها را تا آرنج، همراه با خود آرنج بشویید (فرض)؛ ابتدا دست راست.", "سر را مسح کنید (مقدار فرض یک‌چهارم سر است؛ مسح تمام سر سنت است) و گوش‌ها را مسح کنید.", "پاها را تا مچ، همراه با برآمدگی مچ بشویید (فرض)؛ ابتدا پای راست.", "در مصرف آب اسراف نکنید، حتی کنار آب جاری."] },
             { title: "آداب غسل", icon: "🚿", items: ["غسل پس از جنابت واجب است و برای بانوان پس از پایان حیض و نفاس.", "نیت را به دل بگیرید و «بسم الله» بگویید.", "ابتدا دو دست را تا مچ بشویید و جاهای نجاست را پاک کنید.", "وضو بگیرید.", "سه بار آب بر سر بریزید و مطمئن شوید به ریشه موها رسیده است.", "سپس شانه راست و بعد شانه چپ را بشویید.", "سه فرض غسل (حنفی): مضمضه، استنشاق و شستن تمام بدن."] },
@@ -124,17 +100,33 @@
             { title: "آداب خواب", icon: "🌙", items: ["با وضو و پس از مسواک بخوابید.", "روی پهلوی راست بخوابید.", "آیةالکرسی و سه سوره اخلاص، فلق و ناس را بخوانید.", "سبحان‌الله ۳۳، الحمدلله ۳۳ و الله‌اکبر ۳۴ بار بگویید."] }
         ];
 
-        // لیست کامل سوره‌ها
+        // لیست کامل ۱۱۴ سوره قرآن
         const SURAHS = [
             { id: 1, name: "الفاتحة" }, { id: 2, name: "البقرة" }, { id: 3, name: "آل عمران" }, { id: 4, name: "النساء" }, { id: 5, name: "المائدة" },
             { id: 6, name: "الأنعام" }, { id: 7, name: "الأعراف" }, { id: 8, name: "الأنفال" }, { id: 9, name: "التوبة" }, { id: 10, name: "يونس" },
             { id: 11, name: "هود" }, { id: 12, name: "يوسف" }, { id: 13, name: "الرعد" }, { id: 14, name: "إبراهيم" }, { id: 15, name: "الحجر" },
             { id: 16, name: "النحل" }, { id: 17, name: "الإسراء" }, { id: 18, name: "الكهف" }, { id: 19, name: "مريم" }, { id: 20, name: "طه" },
-            { id: 36, name: "يس" }, { id: 55, name: "الرحمن" }, { id: 67, name: "الملك" }, { id: 112, name: "الإخلاص" }, { id: 113, name: "الفلق" }, { id: 114, name: "الناس" }
-            // برای اینکه کد سنگین نشه، بقیه سوره‌ها رو اینجا نیاوردم، در صورت نیاز می‌تونیم بعدا اضافه کنیم
+            { id: 21, name: "الأنبياء" }, { id: 22, name: "الحج" }, { id: 23, name: "المؤمنون" }, { id: 24, name: "النور" }, { id: 25, name: "الفرقان" },
+            { id: 26, name: "الشعراء" }, { id: 27, name: "النمل" }, { id: 28, name: "القصص" }, { id: 29, name: "العنكبوت" }, { id: 30, name: "الروم" },
+            { id: 31, name: "لقمان" }, { id: 32, name: "السجدة" }, { id: 33, name: "الأحزاب" }, { id: 34, name: "سبأ" }, { id: 35, name: "فاطر" },
+            { id: 36, name: "يس" }, { id: 37, name: "الصافات" }, { id: 38, name: "ص" }, { id: 39, name: "الزمر" }, { id: 40, name: "غافر" },
+            { id: 41, name: "فصلت" }, { id: 42, name: "الشورى" }, { id: 43, name: "الزخرف" }, { id: 44, name: "الدخان" }, { id: 45, name: "الجاثية" },
+            { id: 46, name: "الأحقاف" }, { id: 47, name: "محمد" }, { id: 48, name: "الفتح" }, { id: 49, name: "الحجرات" }, { id: 50, name: "ق" },
+            { id: 51, name: "الذاريات" }, { id: 52, name: "الطور" }, { id: 53, name: "النجم" }, { id: 54, name: "القمر" }, { id: 55, name: "الرحمن" },
+            { id: 56, name: "الواقعة" }, { id: 57, name: "الحديد" }, { id: 58, name: "المجادلة" }, { id: 59, name: "الحشر" }, { id: 60, name: "الممتحنة" },
+            { id: 61, name: "الصف" }, { id: 62, name: "الجمعة" }, { id: 63, name: "المنافقون" }, { id: 64, name: "التغابن" }, { id: 65, name: "الطلاق" },
+            { id: 66, name: "التحريم" }, { id: 67, name: "الملك" }, { id: 68, name: "القلم" }, { id: 69, name: "الحاقة" }, { id: 70, name: "المعارج" },
+            { id: 71, name: "نوح" }, { id: 72, name: "الجن" }, { id: 73, name: "المزمل" }, { id: 74, name: "المدثر" }, { id: 75, name: "القيامة" },
+            { id: 76, name: "الإنسان" }, { id: 77, name: "المرسلات" }, { id: 78, name: "النبأ" }, { id: 79, name: "النازعات" }, { id: 80, name: "عبس" },
+            { id: 81, name: "التكوير" }, { id: 82, name: "الانفطار" }, { id: 83, name: "المطففين" }, { id: 84, name: "الانشقاق" }, { id: 85, name: "البروج" },
+            { id: 86, name: "الطارق" }, { id: 87, name: "الأعلى" }, { id: 88, name: "الغاشية" }, { id: 89, name: "الفجر" }, { id: 90, name: "البلد" },
+            { id: 91, name: "الشمس" }, { id: 92, name: "الليل" }, { id: 93, name: "الضحى" }, { id: 94, name: "الشرح" }, { id: 95, name: "التين" },
+            { id: 96, name: "العلق" }, { id: 97, name: "القدر" }, { id: 98, name: "البينة" }, { id: 99, name: "الزلزلة" }, { id: 100, name: "العاديات" },
+            { id: 101, name: "القارعة" }, { id: 102, name: "التكاثر" }, { id: 103, name: "العصر" }, { id: 104, name: "الهمزة" }, { id: 105, name: "الفيل" },
+            { id: 106, name: "قريش" }, { id: 107, name: "الماعون" }, { id: 108, name: "الكوثر" }, { id: 109, name: "الكافرون" }, { id: 110, name: "النصر" },
+            { id: 111, name: "المسد" }, { id: 112, name: "الإخلاص" }, { id: 113, name: "الفلق" }, { id: 114, name: "الناس" }
         ];
 
-        // ساخت منوی آداب در صفحه اصلی
         window.onload = function() {
             const grid = document.getElementById('main-adab-grid');
             ADAB_DATA.slice(0, 6).forEach((item, index) => {
@@ -180,14 +172,11 @@
                             <button onclick="setTarget(1000)" id="t-1000">۱۰۰۰</button>
                             <button onclick="setTarget(0)" id="t-0">∞</button>
                         </div>
-                        
                         <div class="beads-container" id="beads"></div>
-                        
                         <div class="tasbih-clicker" onclick="incrementTasbih()">
                             <div id="count" style="color: var(--ac);">0</div>
                             <div style="font-size: 16px; color: var(--mu); font-weight: normal;">هدف: <span id="target-label">۳۳</span></div>
                         </div>
-                        
                         <button class="btn-danger" style="margin-top: 20px;" onclick="resetTasbih()">صفر کردن</button>
                         <button class="btn-primary" onclick="back()">بازگشت</button>
                     </div>
@@ -240,7 +229,7 @@
             document.getElementById('main-menu').classList.remove('hidden'); 
         }
 
-        // ==================== منطق تسبیح ====================
+        // ==================== تسبیح ====================
         let count = 0;
         let target = 33;
         
@@ -268,7 +257,6 @@
             for (let i = 0; i < displayCount; i++) {
                 let activeClass = "";
                 if (target > 33 || target === 0) {
-                    // برای اهداف بزرگتر، دانه‌ها رو به صورت درصدی پر می‌کنیم
                     if (i < (count / target) * displayCount) activeClass = "active";
                 } else {
                     if (i < count) activeClass = "active";
@@ -279,10 +267,9 @@
 
         function incrementTasbih() {
             count++;
-            if (target > 0 && count > target) count = 1; // چرخش مجدد
+            if (target > 0 && count > target) count = 1;
             document.getElementById('count').innerText = count;
             renderBeads();
-            
             if (navigator.vibrate) navigator.vibrate(10);
         }
 
@@ -292,7 +279,7 @@
             renderBeads();
         }
 
-        // ==================== منطق قطب‌نما ====================
+        // ==================== قطب‌نما ====================
         let qiblaAngle = 0; 
         let currentHeading = 0;
         let calibrationOffset = 0;
@@ -310,7 +297,6 @@
         function startCompass() {
             const status = document.getElementById('status-box');
             status.innerText = "در حال دریافت موقعیت...";
-            
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
                     (pos) => {
@@ -318,9 +304,7 @@
                         status.innerText = `زاویه قبله: ${Math.round(qiblaAngle)}°`;
                         initDeviceOrientation();
                     },
-                    (err) => {
-                        status.innerText = "خطا در دریافت موقعیت. GPS را روشن کنید.";
-                    },
+                    (err) => { status.innerText = "خطا در دریافت موقعیت."; },
                     { enableHighAccuracy: true }
                 );
             }
@@ -357,7 +341,6 @@
             const lettersGroup = document.getElementById('letters-group');
             const dashedLine = document.getElementById('dashed-line');
             const kabaIcon = document.getElementById('kaba-icon');
-            
             if (!lettersGroup || !dashedLine || !kabaIcon) return;
 
             let heading = event.webkitCompassHeading;
@@ -365,7 +348,6 @@
                 if (event.alpha !== null) heading = 360 - event.alpha;
                 else return;
             }
-
             currentHeading = heading + calibrationOffset;
             lettersGroup.style.transform = `rotate(${-currentHeading}deg)`;
             
@@ -380,7 +362,7 @@
             compassActive = false;
         }
 
-        // ==================== منطق قرآن (با اصلاح بسم الله) ====================
+        // ==================== قرآن ====================
         async function loadSurah(surahId) {
             const contentDiv = document.getElementById('quran-content');
             if (!surahId) { contentDiv.innerHTML = ''; return; }
@@ -394,22 +376,24 @@
                 if (data.code === 200) {
                     const arabicData = data.data[0];
                     const farsiData = data.data[1];
-                    const bismillahText = "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ";
                     
                     let html = `<h3 style="text-align:center; color:var(--ac); margin-bottom:15px;">سوره ${arabicData.name}</h3>`;
                     
-                    // نمایش بسم الله به صورت جداگانه (به جز سوره فاتحه و توبه)
+                    // نمایش بسم الله جداگانه (به جز سوره فاتحه و توبه)
                     if (surahId != 1 && surahId != 9) {
-                        html += `<div class="bismillah">${bismillahText}</div>`;
+                        html += `<div class="bismillah">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>`;
                     }
 
                     arabicData.ayahs.forEach((ayah, index) => {
                         let ayahText = ayah.text;
                         let farsiText = farsiData.ayahs[index] ? farsiData.ayahs[index].text : '';
                         
-                        // حذف بسم الله از ابتدای آیه اول (چون جدا نوشتیم)
+                        // حذف بسم الله از آیه اول با روش مطمئن (حذف ۴ کلمه اول)
                         if (surahId != 1 && surahId != 9 && index === 0) {
-                            ayahText = ayahText.replace(bismillahText, "").trim();
+                            let parts = ayahText.split(' ');
+                            if (parts.length > 4) {
+                                ayahText = parts.slice(4).join(' ');
+                            }
                         }
                         
                         html += `
@@ -424,7 +408,7 @@
                     });
                     contentDiv.innerHTML = html;
                 } else {
-                    contentDiv.innerHTML = '<p style="text-align:center; color:red;">خطا در بارگذاری سوره.</p>';
+                    contentDiv.innerHTML = '<p style="text-align:center; color:red;">خطا در بارگذاری.</p>';
                 }
             } catch (error) {
                 contentDiv.innerHTML = '<p style="text-align:center; color:red;">اتصال به اینترنت برقرار نیست.</p>';
