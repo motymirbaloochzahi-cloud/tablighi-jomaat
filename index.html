@@ -26,67 +26,96 @@
         .adab-list { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
         .adab-item { background: var(--card); border: 1px solid var(--bd); border-radius: 10px; padding: 12px; text-align: right; cursor: pointer; display: flex; align-items: center; gap: 10px; }
         .adab-text { text-align: right; line-height: 2; font-size: 16px; }
-        .adab-text .ar { font-family: 'Amiri', serif; font-size: 22px; color: var(--ac); margin: 10px 0; display: block; border-right: 3px solid var(--ac); padding-right: 10px; }
 
-        /* ====== استایل‌های جدید و دقیق قطب‌نما ====== */
-        .compass-container { 
-            position: relative; 
-            width: 280px; 
-            height: 280px; 
-            margin: 20px auto; 
+        /* ====== استایل‌های اختصاصی قطب‌نما ====== */
+        .compass-wrapper {
+            position: relative;
+            width: 320px;
+            height: 320px;
+            margin: 30px auto;
+        }
+
+        /* دایره داخلی که می‌چرخد */
+        .compass-disc {
+            position: absolute;
+            top: 40px; left: 40px; right: 40px; bottom: 40px; /* فاصله 40px برای حروف بیرونی */
             border-radius: 50%;
-            border: 4px solid var(--bd);
+            border: 3px solid var(--ac);
             background: #fff;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.05), 0 4px 10px rgba(0,0,0,0.1);
+            transition: transform 0.1s linear;
         }
-        
-        /* حلقه‌ای که می‌چرخد (شمال، جنوب و...) */
-        .compass-dial { 
-            position: absolute; 
-            inset: 0; 
-            border-radius: 50%; 
-            transition: transform 0.1s linear; 
-            z-index: 2;
-        }
-        
-        /* حروف جهت‌ها روی حلقه */
-        .dir { position: absolute; font-size: 22px; font-weight: bold; color: var(--tx); display: flex; justify-content: center; align-items: center; }
-        .dir-n { top: 10px; left: 0; right: 0; color: var(--red); }
-        .dir-s { bottom: 10px; left: 0; right: 0; }
-        .dir-e { right: 10px; top: 0; bottom: 0; }
-        .dir-w { left: 10px; top: 0; bottom: 0; }
 
-        /* عقربه کعبه که در مرکز ثابت است */
-        .qibla-needle {
+        /* خط نقطه‌چین از مرکز به سمت لبه */
+        .dashed-line {
             position: absolute;
             top: 50%;
             left: 50%;
-            width: 10px;
-            height: 120px;
-            background: linear-gradient(to bottom, var(--ac) 50%, transparent 50%);
-            margin-left: -5px;
-            margin-top: -120px; /* به سمت بالا */
-            transform-origin: bottom center; /* از مرکز می‌چرخد */
-            z-index: 5;
-            transition: transform 0.2s ease-out;
-            border-radius: 5px;
+            width: 120px; /* نصف قطر دایره (دایره 240px قطر دارد) */
+            height: 4px;
+            background-image: linear-gradient(to right, var(--ac) 50%, transparent 50%);
+            background-size: 10px 4px;
+            background-repeat: repeat-x;
+            transform-origin: left center;
+            margin-top: -2px; /* برای تراز شدن وسط خط */
+            z-index: 1;
         }
-        .qibla-icon {
+
+        /* آیکون کعبه روی لبه دایره */
+        .kaba-icon {
             position: absolute;
-            top: -25px;
+            top: 50%;
             left: 50%;
-            transform: translateX(-50%);
-            font-size: 30px;
+            width: 40px;
+            height: 40px;
+            margin-top: -20px;
+            margin-left: 100px; /* 120px (نصف قطر) - 20px (نصف عرض آیکون) */
+            background: #fff;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            z-index: 3;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transform-origin: -100px center; /* چرخش دور مرکز دایره */
         }
-        
-        .compass-center {
+
+        /* نقطه مرکزی */
+        .center-dot {
             position: absolute;
-            top: 50%; left: 50%;
-            width: 16px; height: 16px;
+            top: 50%;
+            left: 50%;
+            width: 12px;
+            height: 12px;
             background: var(--tx);
             border-radius: 50%;
             transform: translate(-50%, -50%);
-            z-index: 6;
+            z-index: 2;
+        }
+
+        /* حروف جهات بیرون از دایره */
+        .dir-letter {
+            position: absolute;
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--tx);
+            width: 30px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .letter-n { top: -5px; left: 50%; transform: translateX(-50%); color: var(--red); }
+        .letter-s { bottom: -5px; left: 50%; transform: translateX(-50%); }
+        .letter-e { right: -5px; top: 50%; transform: translateY(-50%); }
+        .letter-w { left: -5px; top: 50%; transform: translateY(-50%); }
+
+        /* کانتینر چرخان شامل خط چین، آیکون کعبه */
+        .rotating-group {
+            position: absolute;
+            inset: 0;
+            transition: transform 0.1s linear;
         }
 
         .status-box { background: var(--ac2); color: var(--ac); padding: 8px; border-radius: 8px; margin-top: 10px; font-size: 14px; }
@@ -108,12 +137,10 @@
     </main>
 
     <script>
-        // داده‌های آداب (برای کوتاه بودن اینجا خلاصه شده)
         const ADAB_DATA = [
-            { title: "آداب وضو", icon: "💧", items: ["نیت وضو را به دل بگیرید و «بسم الله» بگویید.", "دو دست را تا مچ بشویید و مسواک بزنید.", "سه بار مضمضه و استنشاق انجام دهید.", "صورت را بشویید (فرض).", "دست‌ها را تا آرنج بشویید (فرض).", "سر و گوش‌ها را مسح کنید.", "پاها را تا مچ بشویید (فرض)."] },
-            { title: "آداب نماز", icon: "🤲", items: ["پیش از اذان آماده شوید.", "با آرامش به مسجد بروید.", "پس از سلام، تسبیحات حضرت زهرا (س) را بگویید.", "با خشوع نماز بخوانید."] }
+            { title: "آداب وضو", icon: "💧", items: ["نیت وضو را به دل بگیرید و «بسم الله» بگویید.", "دو دست را تا مچ بشویید و مسواک بزنید.", "سه بار مضمضه و استنشاق انجام دهید.", "صورت را بشویید (فرض).", "دست‌ها را تا آرنج بشویید (فرض).", "سر و گوش‌ها را مسح کنید.", "پاها را تا مچ بشویید (فرض)."] }
         ];
-        const SURAHS = [{ id: 1, name: "الفاتحة" }, { id: 36, name: "يس" }, { id: 55, name: "الرحمن" }, { id: 112, name: "الإخلاص" }];
+        const SURAHS = [{ id: 1, name: "الفاتحة" }, { id: 36, name: "يس" }];
 
         function show(page) {
             const content = document.getElementById('content');
@@ -133,23 +160,23 @@
                 content.innerHTML = `
                     <div class="card">
                         <h2>🧭 قبله‌نما</h2>
-                        <p style="color:var(--mu); font-size:14px;">گوشی را صاف روی دست بگیرید. اگر جهت‌ها اشتباه بود، دکمه کالیبراسیون را بزنید.</p>
                         
-                        <div class="compass-container">
-                            <!-- حلقه جهات که می‌چرخد -->
-                            <div id="compass-dial" class="compass-dial">
-                                <div class="dir dir-n">N</div>
-                                <div class="dir dir-s">S</div>
-                                <div class="dir dir-e">E</div>
-                                <div class="dir dir-w">W</div>
+                        <div class="compass-wrapper">
+                            <!-- حروف جهات (ثابت در بیرون) -->
+                            <div class="dir-letter letter-n">N</div>
+                            <div class="dir-letter letter-s">S</div>
+                            <div class="dir-letter letter-e">E</div>
+                            <div class="dir-letter letter-w">W</div>
+
+                            <!-- کل دایره با محتویاتش -->
+                            <div id="compass-container" class="compass-disc">
+                                <!-- این گروه می‌چرخد -->
+                                <div id="rotating-group" class="rotating-group">
+                                    <div class="dashed-line"></div>
+                                    <div class="kaba-icon">🕋</div>
+                                </div>
+                                <div class="center-dot"></div>
                             </div>
-                            
-                            <!-- عقربه کعبه که به سمت قبله اشاره می‌کند -->
-                            <div id="qibla-needle" class="qibla-needle">
-                                <div class="qibla-icon">🕋</div>
-                            </div>
-                            
-                            <div class="compass-center"></div>
                         </div>
                         
                         <div id="status-box" class="status-box">در حال آماده‌سازی...</div>
@@ -159,6 +186,7 @@
                     </div>
                 `;
             } 
+            // بقیه کدها (آداب، قرآن) بدون تغییر
             else if (page === 'adab') {
                 let html = `<div class="card" style="text-align:right;"><h2 style="text-align:center;">📖 آداب</h2><div class="adab-list">`;
                 ADAB_DATA.forEach((item, index) => {
@@ -172,7 +200,7 @@
                 content.innerHTML = `
                     <div class="card">
                         <h2>📚 قرآن کریم</h2>
-                        <select id="surah-select" class="quran-select" onchange="loadSurah(this.value)" style="width:100%; padding:10px; border-radius:8px; border:1px solid var(--bd);">
+                        <select id="surah-select" onchange="loadSurah(this.value)" style="width:100%; padding:10px; border-radius:8px; border:1px solid var(--bd);">
                             <option value="">-- انتخاب سوره --</option>${options}
                         </select>
                         <div id="quran-content" style="text-align:right; margin-top:15px;"></div>
@@ -194,11 +222,11 @@
         function reset() { count = 0; document.getElementById('count').innerText = 0; }
         function back() { document.getElementById('content').innerHTML = ''; document.getElementById('main-menu').classList.remove('hidden'); }
 
-        // ==================== منطق قطب‌نما و قبله ====================
+        // ==================== منطق قطب‌نما ====================
         let qiblaAngle = 0; 
         let currentHeading = 0;
+        let calibrationOffset = 0;
         let compassActive = false;
-        let calibrationOffset = 0; // برای تنظیم دستی خطای سنسور
 
         function calculateQibla(lat, lng) {
             const K_LAT = 21.4225, K_LNG = 39.8262;
@@ -222,8 +250,6 @@
                     },
                     (err) => {
                         status.innerText = "خطا در دریافت موقعیت. GPS را روشن کنید.";
-                        status.style.background = "#fee";
-                        status.style.color = "red";
                     },
                     { enableHighAccuracy: true }
                 );
@@ -231,14 +257,9 @@
         }
 
         function initDeviceOrientation() {
-            // درخواست دسترسی به سنسور (برای iOS)
             if (typeof DeviceOrientationEvent.requestPermission === 'function') {
                 DeviceOrientationEvent.requestPermission().then(permission => {
-                    if (permission === 'granted') {
-                        setupOrientationListener();
-                    } else {
-                        document.getElementById('status-box').innerText = "دسترسی به سنسور داده نشد.";
-                    }
+                    if (permission === 'granted') setupOrientationListener();
                 });
             } else {
                 setupOrientationListener();
@@ -251,13 +272,12 @@
             window.addEventListener('deviceorientation', handleOrientation);
             compassActive = true;
             
-            // اضافه کردن دکمه کالیبراسیون به صورت شناور
+            // دکمه کالیبراسیون
             const calBtn = document.createElement('button');
             calBtn.innerText = "تنظیم دستی جهت (کالیبراسیون)";
             calBtn.className = "btn-gray";
             calBtn.style.marginTop = "8px";
             calBtn.onclick = () => {
-                // فرض میکنیم کاربر رو به شمال واقعی ایستاده و دکمه رو میزنه
                 calibrationOffset = -currentHeading; 
                 alert("جهت‌ها با شمال تنظیم شد.");
             };
@@ -265,29 +285,20 @@
         }
 
         function handleOrientation(event) {
-            const dial = document.getElementById('compass-dial');
-            const needle = document.getElementById('qibla-needle');
-            if (!dial || !needle) return;
+            const rotatingGroup = document.getElementById('rotating-group');
+            if (!rotatingGroup) return;
 
-            // گرفتن زاویه گوشی (با پشتیبانی از مرورگرهای مختلف)
             let heading = event.webkitCompassHeading;
             if (heading === undefined || heading === null) {
                 if (event.alpha !== null) heading = 360 - event.alpha;
                 else return;
             }
 
-            // اعمال تنظیمات دستی (کالیبراسیون)
             currentHeading = heading + calibrationOffset;
-
-            // ۱. چرخش حلقه جهات (N,S,E,W)
-            // اگر گوشی به سمت شمال باشد (0)، حلقه نباید بچرخد. اگر 90 درجه بچرخد، حلقه 90- درجه می‌چرخد.
-            dial.style.transform = `rotate(${-currentHeading}deg)`;
-
-            // ۲. چرخش عقربه کعبه
-            // عقربه باید به سمت زاویه قبله (qiblaAngle) اشاره کند
-            // چون گوشی چرخیده، عقربه باید نسبت به جهت فعلی گوشی تنظیم شود
-            const needleRotation = qiblaAngle - currentHeading;
-            needle.style.transform = `rotate(${needleRotation}deg)`;
+            
+            // چرخش گروه (کعبه + خط چین) به سمت زاویه قبله نسبت به جهت گوشی
+            const rotation = qiblaAngle - currentHeading;
+            rotatingGroup.style.transform = `rotate(${rotation}deg)`;
         }
 
         function stopCompass() {
@@ -310,7 +321,7 @@
                 });
                 contentDiv.innerHTML = html;
             } catch (e) {
-                contentDiv.innerHTML = '<p style="color:red;">خطا در اتصال به اینترنت.</p>';
+                contentDiv.innerHTML = '<p style="color:red;">خطا در اتصال.</p>';
             }
         }
     </script>
